@@ -9,6 +9,11 @@ const getAllServices = (req, res) => {
 //@route POST /api/services
 //access public
 const createService = (req, res) => {
+  const { name, phone } = req.body;
+  if (!name || !phone) {
+    res.status(400);
+    throw new Error("All feilds are mandatory!");
+  }
   res.send("Create a services");
 };
 
