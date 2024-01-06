@@ -1,42 +1,44 @@
+const asyncHandler = require("express-async-handler");
+
 //@desc Get all services
 //@route GET /api/services
 //access public
-const getAllServices = (req, res) => {
+const getAllServices = asyncHandler(async (req, res) => {
   res.send("Get All Services");
-};
+});
 
 //@desc create a service
 //@route POST /api/services
 //access public
-const createService = (req, res) => {
+const createService = asyncHandler(async (req, res) => {
   const { name, phone } = req.body;
   if (!name || !phone) {
     res.status(400);
     throw new Error("All feilds are mandatory!");
   }
   res.send("Create a services");
-};
+});
 
 //@desc Get single service
 //@route GET /api/services/:id
 //access public
-const getSingleService = (req, res) => {
+const getSingleService = asyncHandler(async (req, res) => {
   res.send(`Get a service by id ${req.params.id}`);
-};
+});
 
 //@desc Update a service
 //@route PUT /api/services/:id
 //access public
-const updateService = (req, res) => {
+const updateService = asyncHandler(async (req, res) => {
   res.send(`Update a service id ${req.params.id}`);
-};
+});
 
 //@desc Delete a service
 //@route DELETE /api/services/:id
 //access public
-const deleteService = (req, res) => {
+const deleteService = asyncHandler(async (req, res) => {
   res.send(`delete a service id ${req.params.id}`);
-};
+});
 
 module.exports = {
   getAllServices,
