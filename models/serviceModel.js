@@ -3,7 +3,10 @@ const mongoose = require("mongoose");
 const serviceSchema = new mongoose.Schema(
   {
     service_id: String,
-    title: String,
+    title: {
+      type: String,
+      required: [true, "please add your title"],
+    },
     img: {
       type: String,
       required: true,

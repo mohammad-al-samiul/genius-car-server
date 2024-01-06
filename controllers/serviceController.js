@@ -1,10 +1,11 @@
 const asyncHandler = require("express-async-handler");
-
+const Service = require("../models/serviceModel");
 //@desc Get all services
 //@route GET /api/services
 //access public
 const getAllServices = asyncHandler(async (req, res) => {
-  res.send("Get All Services");
+  const services = await Service.find({});
+  res.status(200).json(services);
 });
 
 //@desc create a service
