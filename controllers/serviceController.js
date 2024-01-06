@@ -24,7 +24,12 @@ const createService = asyncHandler(async (req, res) => {
 //@route GET /api/services/:id
 //access public
 const getSingleService = asyncHandler(async (req, res) => {
-  res.send(`Get a service by id ${req.params.id}`);
+  const service = await Service.findById(req.params.id);
+  if (!service) {
+    res.status(404);
+    throw new Error("Service Not found!");
+  }
+  res.status(200).json(service);
 });
 
 //@desc Update a service
