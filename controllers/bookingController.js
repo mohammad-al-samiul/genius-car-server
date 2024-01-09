@@ -33,7 +33,8 @@ const deleteBookings = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Booking not found");
   }
-  await Booking.deleteOne({ _id: id });
+  await Booking.findByIdAndDelete({ _id: id });
+  res.send({ success: true });
 });
 
 //@desc UPDATE bookings
@@ -41,16 +42,20 @@ const deleteBookings = asyncHandler(async (req, res) => {
 //@access public
 const updateBookings = asyncHandler(async (req, res) => {
   const { id } = req.params;
-  const {status} = req.body;
+  const { status } = req.body;
   const booking = await Booking.findById(id);
   if (!booking) {
     res.status(404);
     throw new Error("Booking not found");
   }
-  const bookings = await Booking.findByIdAndUpdate(req.params.id, status, {
-    new: true,
-  });
-  res.send({bookings, status : 'approved'});
+  const bookings = await Booking.findByIdAndUpdate(
+    id,
+    { status },
+    {
+      new: true,
+    }
+  );
+  res.send({ bookings, success: true });
 });
 
 module.exports = {
