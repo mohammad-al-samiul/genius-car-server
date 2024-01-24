@@ -10,7 +10,7 @@ const createBooking = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("All feilds are mandatory!");
   }
-  const booking = await Booking.create(req.body);
+  const booking = await Booking.create({ ...req.body, user_id: req.user._id });
   res.json({ booking, insertedId: true });
 });
 
@@ -19,6 +19,10 @@ const createBooking = asyncHandler(async (req, res) => {
 //@access public
 const getBookings = asyncHandler(async (req, res) => {
   const { email } = req.query;
+  if (email !== req.user.email) {
+    res.status(401);
+    throw new Error("User is not authorized");
+  }
   const bookings = await Booking.find({ email });
   res.send(bookings);
 });
@@ -28,10 +32,15 @@ const getBookings = asyncHandler(async (req, res) => {
 //@access public
 const deleteBookings = asyncHandler(async (req, res) => {
   const { id } = req.params;
+
   const booking = await Booking.findById(id);
   if (!booking) {
     res.status(404);
     throw new Error("Booking not found");
+  }
+  if (booking.user_id.toString() !== req.user._id) {
+    res.status(403);
+    throw new Error("User don't have permission to update the bookings");
   }
   await Booking.findByIdAndDelete({ _id: id });
   res.send({ success: true });
@@ -47,6 +56,10 @@ const updateBookings = asyncHandler(async (req, res) => {
   if (!booking) {
     res.status(404);
     throw new Error("Booking not found");
+  }
+  if (booking.user_id.toString !== req.user._id) {
+    res.status(403);
+    throw new Error("User don't have to delete the bookings");
   }
   const bookings = await Booking.findByIdAndUpdate(
     id,
