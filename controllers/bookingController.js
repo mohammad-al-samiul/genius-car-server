@@ -10,7 +10,8 @@ const createBooking = asyncHandler(async (req, res) => {
     res.status(400);
     throw new Error("All feilds are mandatory!");
   }
-  const booking = await Booking.create({ ...req.body, user_id: req.user._id });
+  const booking = await Booking.create(req.body);
+  //{ ...req.body, user_id: req.user._id }
   res.json({ booking, insertedId: true });
 });
 

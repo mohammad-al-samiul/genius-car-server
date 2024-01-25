@@ -7,8 +7,8 @@ const User = require("../models/userModel");
 //route POST /api/user/register
 //@access private
 const registerUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
-  if (!username || !email || !password) {
+  const { displayName, email, password } = req.body;
+  if (!displayName || !email || !password) {
     res.status(400);
     throw new Error("All feilds are mandatory!");
   }
@@ -19,7 +19,7 @@ const registerUser = asyncHandler(async (req, res) => {
   }
   const hashPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
-    username,
+    displayName,
     email,
     password: hashPassword,
   });
@@ -47,7 +47,7 @@ const loginUser = asyncHandler(async (req, res) => {
     const accessToken = jwt.sign(
       {
         user: {
-          username: user.username,
+          displayName: user.displayName,
           email: user.email,
           _id: user._id,
         },
