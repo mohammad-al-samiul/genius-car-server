@@ -36,12 +36,14 @@ const registerUser = asyncHandler(async (req, res) => {
 //route POST /api/user/login
 //@access private
 const loginUser = asyncHandler(async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password} = req.body;
+  //console.log(email);
   if (!email || !password) {
     res.status(400);
     throw new Error("All feilds are mandatory!");
   }
   const user = await User.findOne({ email });
+  //console.log(user);
 
   if (user && (await bcrypt.compare(password, user.password))) {
     const accessToken = jwt.sign(

@@ -24,11 +24,11 @@ const getBookings = asyncHandler(async (req, res) => {
     res.status(401);
     throw new Error("User is not authorized");
   }
-  const bookings = await Booking.find({ email });
+  const bookings = await Booking.find({ user_id : req.user._id });
   res.send(bookings);
 });
 
-//@desc DELETE a booking
+//@desc DELETE booking
 //@route DELETE '/api/bookings/:id'
 //@access public
 const deleteBookings = asyncHandler(async (req, res) => {
@@ -58,7 +58,7 @@ const updateBookings = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Booking not found");
   }
-  if (booking.user_id.toString !== req.user._id) {
+  if (booking.user_id.toString() !== req.user._id) {
     res.status(403);
     throw new Error("User don't have to delete the bookings");
   }
