@@ -25,7 +25,22 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    res.status(201).json({ _id: user._id, email: user.email });
+    const accessToken = jwt.sign(
+      {
+        user: {
+          displayName: user.displayName,
+          email: user.email,
+          _id: user._id,
+        },
+      },
+      process.env.ACCESS_TOKEN_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+    //console.log({accessToken});
+    // res.status(200).json({ accessToken });
+    res.status(201).json({ _id: user._id, email: user.email, accessToken });
   } else {
     res.status(400);
     throw new Error("User data is not valid");
@@ -59,6 +74,7 @@ const loginUser = asyncHandler(async (req, res) => {
         expiresIn: "1d",
       }
     );
+    //console.log({accessToken});
     res.status(200).json({ accessToken });
   } else {
     res.status(401);
